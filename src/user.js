@@ -25,10 +25,10 @@ UserSchema.virtual("postCount").get(function () {
   return this.posts.length;
 });
 
-UserSchema.pre("deleteOne", function (next) {
+UserSchema.pre("deleteOne", { document: true, query: false }, function () {
   const BlogPost = mongoose.model("blogPost");
   // this === joe
-  BlogPost.deleteMany({ _id: { $in: this.blogPosts } }).then(() => next());
+  return BlogPost.deleteMany({ _id: { $in: this.blogPosts } });
 });
 
 const User = mongoose.model("user", UserSchema);
